@@ -6,5 +6,5 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const IBoard& b) {
-    stream << "TODO" << std::endl;
+    stream << "TODO: implement here" << std::endl;
 }
