@@ -1,6 +1,7 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+#include <iostream>
 #include <cstdint>
 
 typedef uint_fast8_t Cord;
@@ -12,10 +13,12 @@ enum class TileType : char {
     BackSlash = '\\'
 };
 
-typedef struct {
+typedef struct _Cell {
     TileType  Type;
-    std::uint_fast8_t   Direction;
+    friend std::ostream& operator<<(std::ostream& stream, const _Cell& c);
 }__attribute__((__packed__)) Cell;
+
+static constexpr Cell EmptyCell = Cell { TileType::None };
 
 
 typedef struct _Operation {
@@ -23,8 +26,9 @@ typedef struct _Operation {
     Cord Y;
     Cell Cell;
 
-    void ToString(char& out);
+    void ToString(char* out) const;
     static _Operation ToOperation(const char* notation);
+    friend std::ostream& operator<<(std::ostream& stream, const _Operation& o);
 } Operation;
 
 #endif

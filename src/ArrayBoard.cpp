@@ -12,13 +12,38 @@ ArrayBoard::ArrayBoard() {
 }
 
 Cell& ArrayBoard::operator()(Cord x, Cord y) {
+
+#ifndef _NO_VALIDATIONS_
+    if ((x > this->Width()) ||
+        (y > this->Height()))
+        throw "Out of Range";
+#endif
+
     auto& cell = this->_board[this->_left + x][this->_top + y];
 
-    (this->_left   + 1 <= x) && (this->_left--);
-    (this->_top    + 1 <= y) && (this->_top--);
-    (this->_right  - 1 >= x) && (this->_right++);
-    (this->_bottom - 1 >= y) && (this->_bottom++);
+    (x == 0) && (this->_left--);
+    (y == 0) && (this->_top--);
+    (this->_right  - 1 >= this->_left + x) && (this->_right++);
+    (this->_bottom - 1 >= this->_top  + y) && (this->_bottom++);
     // or this->_left = x - 1;
 
     return cell;
+}
+
+const Cell& ArrayBoard::Get(Cord x, Cord y) const {
+#ifndef _NO_VALIDATIONS_
+    if ((x > this->Width()) ||
+        (y > this->Height()))
+        return EmptyCell;
+#endif
+
+    return this->_board[this->_left + x][this->_top + y];
+}
+
+Cord ArrayBoard::Width() const {
+    return this->_right - this->_left;
+}
+
+Cord ArrayBoard::Height() const {
+    return this->_bottom - this->_top;
 }

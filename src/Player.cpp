@@ -19,14 +19,31 @@ Player::~Player() {
 
 Operation Player::Turn() {
     std::cout << "--- Your Turn ---" << std::endl;
+
+input:
     std::cout << "Input Notation: ";
 
     std::string notation;
     std::cin >> notation;
 
-    Operation operation = Operation::ToOperation(notation.c_str());
+    Operation operation;
+
+#ifndef _NO_VALIDATIONS_
+    try {
+#endif
+
+    operation = Operation::ToOperation(notation.c_str());
 
     this->_board << operation;
+
+#ifndef _NO_VALIDATIONS_
+    }
+    catch (const char* message) {
+        std::cerr << message << std::endl;
+
+        goto input;
+    }
+#endif
 
     return operation;
 }

@@ -13,6 +13,9 @@ public:
     ~ArrayBoard() {};
 
     Cell& operator()(Cord x, Cord y);
+    const Cell& Get(Cord x, Cord y) const;
+    Cord  Width()  const;
+    Cord  Height() const;
 
 private:
     Cell _board[512][512];
