@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 #include "Structs.h"
 #include "ArrayBoard.h"
@@ -25,6 +26,9 @@ input:
 
     std::string notation;
     std::cin >> notation;
+
+    if (notation == "")
+        std::exit(0);
 
     Operation operation;
 
