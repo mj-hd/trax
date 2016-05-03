@@ -13,6 +13,8 @@ public:
 protected:
     IBoard* _board;
     IPlayer* _players[2];
+
+    void _chain(Coord x, Coord y);
 };
 
 #endif

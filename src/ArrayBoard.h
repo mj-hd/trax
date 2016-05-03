@@ -5,24 +5,27 @@
 
 #include "IBoard.h"
 
-typedef std::uint_fast16_t InternalCord;
+typedef std::uint_fast16_t InternalCoord;
 
 class ArrayBoard : public IBoard {
 public:
     ArrayBoard();
     ~ArrayBoard() {};
 
-    Cell& operator()(Cord x, Cord y);
-    const Cell& Get(Cord x, Cord y) const;
-    Cord  Width()  const;
-    Cord  Height() const;
+    Cell& operator()(Coord x, Coord y);
+    const Cell& Get(Coord x, Coord y) const;
+    Coord Width()  const;
+    Coord Height() const;
+
+    void BeginChange();
+    void EndChange();
 
 private:
     Cell _board[512][512];
-    InternalCord _left;
-    InternalCord _top;
-    InternalCord _right;
-    InternalCord _bottom;
+    InternalCoord _left;
+    InternalCoord _top;
+    InternalCoord _right;
+    InternalCoord _bottom;
 };
 
 #endif

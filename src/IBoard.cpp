@@ -96,6 +96,15 @@ decideOtherColors:
             if (!cell.ColoredBottom) { cell.Bottom = !cell.Top; }
             if (!cell.ColoredLeft)   { cell.Left   = !cell.Right; }
 
+            /*
+             * TODO: compare performance
+            for (auto i = 0; i < 4; i++) {
+                if (!(cell.IsColored & (1 << i)))
+                    if (!((cell.Color >> (3 - i)) & 1))
+                        cell.Color |= 1 << i;
+            }*/
+
+
             break;
     }
 
@@ -110,20 +119,20 @@ std::ostream& operator<<(std::ostream& stream, const IBoard& b) {
     std::stringstream line;
 
     line << "  ";
-    for (Cord x = 0; x < width; x++) {
+    for (Coord x = 0; x < width; x++) {
         line << (char)(x + '@') << " ";
     }
 
     std::cout << line.str() << std::endl;
 
-    for (Cord y = 0; y < height; y++) {
+    for (Coord y = 0; y < height; y++) {
 
         line.str("");
         line.clear();
 
         line << (char)(y + '0') << " ";
 
-        for (Cord x = 0; x < width; x++) {
+        for (Coord x = 0; x < width; x++) {
             line << b.Get(x, y) << " ";
         }
 

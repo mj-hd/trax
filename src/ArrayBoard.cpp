@@ -11,7 +11,7 @@ ArrayBoard::ArrayBoard() {
     std::memset(this->_board, 0, sizeof(Cell) * 512 * 512);
 }
 
-Cell& ArrayBoard::operator()(Cord x, Cord y) {
+Cell& ArrayBoard::operator()(Coord x, Coord y) {
 
 #ifndef _NO_VALIDATIONS_
     if ((x >= this->Width()) ||
@@ -29,7 +29,7 @@ Cell& ArrayBoard::operator()(Cord x, Cord y) {
     return cell;
 }
 
-const Cell& ArrayBoard::Get(Cord x, Cord y) const {
+const Cell& ArrayBoard::Get(Coord x, Coord y) const {
 #ifndef _NO_VALIDATIONS_
     if ((x >= this->Width()) ||
         (y >= this->Height()))
@@ -39,10 +39,18 @@ const Cell& ArrayBoard::Get(Cord x, Cord y) const {
     return this->_board[this->_left + x][this->_top + y];
 }
 
-Cord ArrayBoard::Width() const {
+Coord ArrayBoard::Width() const {
     return this->_right - this->_left + 1;
 }
 
-Cord ArrayBoard::Height() const {
+Coord ArrayBoard::Height() const {
     return this->_bottom - this->_top + 1;
+}
+
+void ArrayBoard::BeginChange() {
+    // TODO: implement here
+}
+
+void ArrayBoard::EndChange() {
+    // TODO: implement here
 }

@@ -10,10 +10,13 @@ class IBoard {
 public:
     ~IBoard() {};
 
-    virtual Cell&  operator()(Cord x, Cord y) = 0;
-    virtual const Cell&  Get(Cord x, Cord y) const = 0;
-    virtual Cord   Width()  const = 0;
-    virtual Cord   Height() const = 0;
+    virtual Cell&  operator()(Coord x, Coord y) = 0;
+    virtual const Cell&  Get(Coord x, Coord y) const = 0;
+    virtual Coord Width()  const = 0;
+    virtual Coord Height() const = 0;
+
+    virtual void BeginChange() = 0;
+    virtual void EndChange() = 0;
 
     friend IBoard* operator<<(IBoard* b, const Operation& op);
 
