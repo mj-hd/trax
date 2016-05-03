@@ -1,5 +1,6 @@
 #include "IBoard.h"
 
+#include <iostream>
 #include <sstream>
 
 IBoard* operator<<(IBoard* b, const Operation& op) {
@@ -90,10 +91,10 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
 
 decideOtherColors:
             // decide other 2 colors
-            if (!cell.ColoredTop)    { cell.Top    = cell.Bottom; }
-            if (!cell.ColoredRight)  { cell.Right  = cell.Left; }
-            if (!cell.ColoredBottom) { cell.Bottom = cell.Top; }
-            if (!cell.ColoredLeft)   { cell.Left   = cell.Right; }
+            if (!cell.ColoredTop)    { cell.Top    = !cell.Bottom; }
+            if (!cell.ColoredRight)  { cell.Right  = !cell.Left; }
+            if (!cell.ColoredBottom) { cell.Bottom = !cell.Top; }
+            if (!cell.ColoredLeft)   { cell.Left   = !cell.Right; }
 
             break;
     }
