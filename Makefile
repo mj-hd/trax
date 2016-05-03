@@ -2,7 +2,7 @@ PROGRAM_NAME := $(shell basename `pwd`)
 
 # compiler
 CXX := g++
-CXXFLAGS := -O2 -Wextra -std=c++11 -fpermissive -g3
+CXXFLAGS := -O2 -Wextra -std=c++14 -fpermissive -g3
 LIBS :=
 
 # directory

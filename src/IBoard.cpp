@@ -3,7 +3,8 @@
 #include <sstream>
 
 IBoard* operator<<(IBoard* b, const Operation& op) {
-    (*b)(op.X, op.Y) = op.Cell;
+    // TODO: convert NotationType to TileType
+    //(*b)(op.X, op.Y) = op.Type;
     return b;
 }
 

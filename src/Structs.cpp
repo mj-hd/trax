@@ -2,13 +2,9 @@
 
 #include "Structs.h"
 
-std::ostream& operator<<(std::ostream& stream, const Cell& c) {
-    if (c.Type == TileType::None) {
-        return stream << " ";
-    }
+char Cell::ToString() const { return TileChars[this->Type]; }
 
-    return stream << (char)c.Type;
-}
+std::ostream& operator<<(std::ostream& stream, const Cell& c) { return stream << c.ToString(); }
 
 void Operation::ToString(char* out) const {
 
@@ -21,7 +17,7 @@ void Operation::ToString(char* out) const {
 
     out[0] = this->X + '@';
     out[1] = this->Y + '0';
-    out[2] = (char)this->Cell.Type;
+    out[2] = (char)this->Type;
     out[3] = '\0';
 }
 
@@ -42,7 +38,7 @@ Operation Operation::ToOperation(const char* notation) {
 
     result.X         = notation[0] - '@';
     result.Y         = notation[1] - '0';
-    result.Cell.Type = (TileType)notation[2];
+    result.Type = (NotationType)notation[2];
 
     return result;
 }
