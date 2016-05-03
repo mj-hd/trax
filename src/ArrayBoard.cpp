@@ -1,7 +1,6 @@
 #include "ArrayBoard.h"
 
 #include <cstring>
-#include <iostream>
 
 ArrayBoard::ArrayBoard() {
     this->_left   = 256;
@@ -22,21 +21,10 @@ Cell& ArrayBoard::operator()(Cord x, Cord y) {
 
     auto& cell = this->_board[this->_left + x][this->_top + y];
 
-    std::cout << "X:" << (int)x << std::endl;
-    std::cout << "Y:" << (int)y << std::endl;
-
-    std::cout << this->_left << "," << this->_right << std::endl;
-    std::cout << this->_top << "," << this->_bottom << std::endl;
-
     if (this->_right  == this->_left + x) this->_right++;
     if (this->_bottom == this->_top  + y) this->_bottom++;
     if (x == 0) this->_left--;
     if (y == 0) this->_top--;
-
-    std::cout << "------------" << std::endl;
-
-    std::cout << this->_left << "," << this->_right << std::endl;
-    std::cout << this->_top << "," << this->_bottom << std::endl;
 
     return cell;
 }

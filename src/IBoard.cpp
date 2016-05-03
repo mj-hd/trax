@@ -1,6 +1,5 @@
 #include "IBoard.h"
 
-#include <iostream>
 #include <sstream>
 
 IBoard* operator<<(IBoard* b, const Operation& op) {
@@ -98,12 +97,6 @@ decideOtherColors:
 
             break;
     }
-
-    std::cout << (int)cell.Type << std::endl;
-    std::cout << (int)top.Type << std::endl;
-    std::cout << (int)right.Type << std::endl;
-    std::cout << (int)bottom.Type << std::endl;
-    std::cout << (int)left.Type << std::endl;
 
     return b;
 }
