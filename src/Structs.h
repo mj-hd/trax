@@ -6,21 +6,21 @@
 
 typedef uint_fast8_t Cord;
 
-enum class Colors : char {
+enum class Colors : unsigned char {
     Red   = 0b1111111,
     Black = 0b1111111,
     White = 0b0000000
 };
 
 // names indicate where red points are
-enum class TileType : char {
+enum class TileType : unsigned char {
     None        = 0b00000000,
-    Horizontal  = 0b00000101,
-    Vertical    = 0b00001010,
-    TopRight    = 0b00001100,
-    RightBottom = 0b00000110,
-    BottomLeft  = 0b00000011,
-    LeftTop     = 0b00001001
+    Horizontal  = 0b11110101,
+    Vertical    = 0b11111010,
+    TopRight    = 0b11111100,
+    RightBottom = 0b11110110,
+    BottomLeft  = 0b11110011,
+    LeftTop     = 0b11111001
 };
 
 static char TileChars[16] = {
@@ -29,16 +29,23 @@ static char TileChars[16] = {
 
 union Cell {
     struct {
-        char MetaData : 4;
-        char Type : 4;
+        // lsb
+        unsigned char Type : 4;
+        unsigned char Exists : 4;
+        // msb
     };
     struct {
-        char        : 4;
-        char Top    : 1;
-        char Right  : 1;
-        char Bottom : 1;
-        char Left   : 1;
-    } Color;
+        // lsb
+        unsigned char Left   : 1;
+        unsigned char Bottom : 1;
+        unsigned char Right  : 1;
+        unsigned char Top    : 1;
+        unsigned char ColoredLeft    : 1;
+        unsigned char ColoredBottom  : 1;
+        unsigned char ColoredRight   : 1;
+        unsigned char ColoredTop     : 1;
+        // msb
+    };
     TileType Tile;
 
     friend std::ostream& operator<<(std::ostream& stream, const Cell& c);

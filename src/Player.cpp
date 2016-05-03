@@ -34,7 +34,7 @@ input:
 
     operation = Operation::ToOperation(notation.c_str());
 
-    this->_board << operation;
+    //this->_board << operation;
 
 #ifndef _NO_VALIDATIONS_
     }
