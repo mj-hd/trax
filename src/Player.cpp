@@ -32,22 +32,18 @@ input:
 
     Operation operation;
 
-#ifndef _NO_VALIDATIONS_
     try {
-#endif
 
-    operation = Operation::ToOperation(notation.c_str());
+        operation = Operation::ToOperation(notation.c_str());
 
-    //this->_board << operation;
+        //this->_board << operation;
 
-#ifndef _NO_VALIDATIONS_
     }
     catch (const char* message) {
         std::cerr << message << std::endl;
 
         goto input;
     }
-#endif
 
     return operation;
 }

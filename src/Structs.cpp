@@ -8,12 +8,8 @@ std::ostream& operator<<(std::ostream& stream, const Cell& c) { return stream <<
 
 void Operation::ToString(char* out) const {
 
-#ifndef _NO_VALIDATIONS_
-
     if (sizeof(out) / sizeof(char) < 3)
         throw "String Too Short";
-
-#endif
 
     out[0] = this->X + '@';
     out[1] = this->Y + '0';
@@ -24,7 +20,6 @@ void Operation::ToString(char* out) const {
 Operation Operation::ToOperation(const char* notation) {
     Operation result;
 
-#ifndef _NO_VALIDATIONS_
     if (sizeof(notation) / sizeof(char) < 3)
         throw "Invalid Notation";
 
@@ -34,7 +29,6 @@ Operation Operation::ToOperation(const char* notation) {
     if (('@' > notation[0]) ||
         ('0' > notation[1]))
         throw "Position Out of Range";
-#endif
 
     result.X         = notation[0] - '@';
     result.Y         = notation[1] - '0';
@@ -46,19 +40,15 @@ Operation Operation::ToOperation(const char* notation) {
 std::ostream& operator<<(std::ostream& stream, const Operation& o) {
     char tmp[3];
 
-#ifndef _NO_VALIDATIONS_
     try {
-#endif
 
         o.ToString(tmp);
 
-#ifndef _NO_VALIDATIONS_
     }
     catch (const char* message) {
         std::cerr << message << std::endl;
         return stream;
     }
-#endif
 
     return stream << tmp;
 }
