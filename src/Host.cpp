@@ -20,18 +20,36 @@ bool Host::Turn() {
     Operation operation;
 
     for (auto player : this->_players) {
+dc:
         operation = player->Turn();
 
         // TODO: do something
         // if game is over, return false
-        this->_board << operation;
+        try {
+            this->_board->BeginChange();
 
-        this->_chain(operation.X, operation.Y);
+            this->_board << operation;
+
+            this->_chainAround(operation.X, operation.Y);
+
+            this->_board->EndChange();
+        }
+        catch (const char* message) {
+            std::cerr << message << std::endl;
+            goto dc;
+        }
 
         std::cout << *this->_board;
     }
 
     return true;
+}
+
+void Host::_chainAround(Coord x, Coord y) {
+    if (y > 0                        ) this->_chain(x,     y - 1);
+    if (x < this->_board->Width() - 1) this->_chain(x + 1, y);
+    if (y < this->_board->Height()- 1) this->_chain(x,     y + 1);
+    if (x > 0                        ) this->_chain(x - 1, y);
 }
 
 void Host::_chain(Coord x, Coord y) {
@@ -42,34 +60,39 @@ void Host::_chain(Coord x, Coord y) {
 
     char tile    = 0;
     char colored = 0;
-    int  cnt     = 0;
+    int  cntRed  = 0;
+    int  cntWht  = 0;
 
     // scan neighbors
     for (auto i = 0; i < 4; i++) {
-        auto sx = x + (i % 3) - 1;
-        auto sy = y + (i / 3) - 1;
+        auto sx = x + ((i*2 + 1) % 3) - 1;
+        auto sy = y + ((i*2 + 1) / 3) - 1;
 
         auto& neighbor = this->_board->Get(sx, sy);
 
         if (!neighbor.Exists) continue;
 
-        cnt++;
+        char color = ((neighbor.Color >> i) & 1);
 
-        tile    |= ((neighbor.Color >> (3 - i)) & 1) << i;
-        colored |= 1 << i;
+        cntRed += color;
+        cntWht += !color;
+
+        tile    |= color << (3 - i);
+        colored |= 1 << (3 - i);
     }
 
-    if (cnt < 2) return;
+    if (cntRed + cntWht < 2) return;
+    if (cntRed == cntWht)    return;
 
     cell.Color     = tile;
     cell.IsColored = colored;
 
-    // TODO: decide other 2 colors
+    if (cntRed < cntWht) {
+        for (auto i = 0; i < 4; i++) {
+            if (!(colored & (1 << i)))
+                cell.Color |= 1 << i;
+        }
+    }
 
-    std::cout << "(" << (int)x << "," << (int)y << ")'s Chained! " << cell << std::endl;
-
-    if (y > 2)                          this->_chain(x,     y - 1);
-    if (x < this->_board->Width()  - 1) this->_chain(x + 1, y);
-    if (y < this->_board->Height() - 1) this->_chain(x,     y + 1);
-    if (x > 2)                          this->_chain(x - 1, y);
+    this->_chainAround(x, y);
 }

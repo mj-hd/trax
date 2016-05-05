@@ -19,14 +19,12 @@ Cell& ArrayBoard::operator()(Coord x, Coord y) {
         throw "Out of Range";
 #endif
 
-    auto& cell = this->_board[this->_left + x][this->_top + y];
+    if (this->_right  == this->_leftInChange + x) this->_rightInChange  = this->_right  + 1;
+    if (this->_bottom == this->_topInChange  + y) this->_bottomInChange = this->_bottom + 1;
+    if (this->_leftInChange + x == this->_left) this->_leftInChange = this->_left - 1;
+    if (this->_topInChange  + y == this->_top)  this->_topInChange  = this->_top  - 1;
 
-    if (this->_right  == this->_left + x) this->_right++;
-    if (this->_bottom == this->_top  + y) this->_bottom++;
-    if (x == 0) this->_left--;
-    if (y == 0) this->_top--;
-
-    return cell;
+    return this->_board[this->_left + x][this->_top + y];
 }
 
 const Cell& ArrayBoard::Get(Coord x, Coord y) const {
@@ -48,9 +46,15 @@ Coord ArrayBoard::Height() const {
 }
 
 void ArrayBoard::BeginChange() {
-    // TODO: implement here
+    this->_leftInChange   = this->_left;
+    this->_topInChange    = this->_top;
+    this->_rightInChange  = this->_right;
+    this->_bottomInChange = this->_bottom;
 }
 
 void ArrayBoard::EndChange() {
-    // TODO: implement here
+    this->_left   = this->_leftInChange;
+    this->_top    = this->_topInChange;
+    this->_right  = this->_rightInChange;
+    this->_bottom = this->_bottomInChange;
 }
