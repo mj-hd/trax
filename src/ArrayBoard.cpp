@@ -12,12 +12,9 @@ ArrayBoard::ArrayBoard() {
 }
 
 Cell& ArrayBoard::operator()(Coord x, Coord y) {
-
-#ifndef _NO_VALIDATIONS_
     if ((x >= this->Width()) ||
         (y >= this->Height()))
         throw "Out of Range";
-#endif
 
     if (this->_right  == this->_leftInChange + x) this->_rightInChange  = this->_right  + 1;
     if (this->_bottom == this->_topInChange  + y) this->_bottomInChange = this->_bottom + 1;
@@ -28,11 +25,9 @@ Cell& ArrayBoard::operator()(Coord x, Coord y) {
 }
 
 const Cell& ArrayBoard::Get(Coord x, Coord y) const {
-#ifndef _NO_VALIDATIONS_
     if ((x >= this->Width()) ||
         (y >= this->Height()))
         return EmptyCell;
-#endif
 
     return this->_board[this->_left + x][this->_top + y];
 }
