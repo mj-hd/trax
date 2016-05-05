@@ -118,7 +118,7 @@ std::ostream& operator<<(std::ostream& stream, const IBoard& b) {
 
     std::stringstream line;
 
-    line << "  ";
+    line << std::endl << "  ";
     for (Coord x = 0; x < width; x++) {
         line << (char)(x + '@') << " ";
     }
