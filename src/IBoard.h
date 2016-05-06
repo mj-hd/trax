@@ -12,6 +12,7 @@ public:
 
     virtual Cell&  operator()(Coord x, Coord y) = 0;
     virtual const Cell&  Get(Coord x, Coord y) const = 0;
+    virtual void Set(Coord x, Coord y, Cell& cell) = 0;
     virtual Coord Width()  const = 0;
     virtual Coord Height() const = 0;
 

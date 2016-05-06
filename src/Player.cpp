@@ -27,8 +27,7 @@ input:
     std::string notation;
     std::cin >> notation;
 
-    if (notation == "")
-        std::exit(0);
+    if (std::cin.eof()) { std::exit(0); }
 
     Operation operation;
 

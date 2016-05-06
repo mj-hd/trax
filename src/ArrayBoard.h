@@ -14,6 +14,7 @@ public:
 
     Cell& operator()(Coord x, Coord y);
     const Cell& Get(Coord x, Coord y) const;
+    void Set(Coord x, Coord y, Cell& cell);
     Coord Width()  const;
     Coord Height() const;
 

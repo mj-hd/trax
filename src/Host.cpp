@@ -54,7 +54,7 @@ void Host::_chainAround(Coord x, Coord y) {
 
 void Host::_chain(Coord x, Coord y) {
 
-    auto& cell = (*this->_board)(x, y);
+    auto cell = this->_board->Get(x, y);
 
     if (cell.Exists) return;
 
@@ -93,6 +93,8 @@ void Host::_chain(Coord x, Coord y) {
                 cell.Color |= 1 << i;
         }
     }
+
+    this->_board->Set(x, y, cell);
 
     this->_chainAround(x, y);
 }

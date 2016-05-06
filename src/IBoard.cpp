@@ -4,7 +4,7 @@
 #include <sstream>
 
 IBoard* operator<<(IBoard* b, const Operation& op) {
-    auto& cell = (*b)(op.X, op.Y);
+    auto cell = b->Get(op.X, op.Y);
 
     auto& top    = (op.Y == 0) ? EmptyCell : b->Get(op.X,     op.Y - 1);
     auto& right  =                           b->Get(op.X + 1, op.Y);
@@ -107,6 +107,8 @@ decideOtherColors:
 
             break;
     }
+
+    b->Set(op.X, op.Y, cell);
 
     return b;
 }

@@ -16,11 +16,6 @@ Cell& ArrayBoard::operator()(Coord x, Coord y) {
         (y >= this->Height()))
         throw "Out of Range";
 
-    if (this->_right  == this->_leftInChange + x) this->_rightInChange  = this->_right  + 1;
-    if (this->_bottom == this->_topInChange  + y) this->_bottomInChange = this->_bottom + 1;
-    if (this->_leftInChange + x == this->_left) this->_leftInChange = this->_left - 1;
-    if (this->_topInChange  + y == this->_top)  this->_topInChange  = this->_top  - 1;
-
     return this->_board[this->_left + x][this->_top + y];
 }
 
@@ -30,6 +25,15 @@ const Cell& ArrayBoard::Get(Coord x, Coord y) const {
         return EmptyCell;
 
     return this->_board[this->_left + x][this->_top + y];
+}
+
+void ArrayBoard::Set(Coord x, Coord y, Cell& cell) {
+    this->_board[this->_left + x][this->_top + y] = cell;
+
+    if (this->_right  == this->_leftInChange + x) this->_rightInChange  = this->_right  + 1;
+    if (this->_bottom == this->_topInChange  + y) this->_bottomInChange = this->_bottom + 1;
+    if (this->_leftInChange + x == this->_left) this->_leftInChange = this->_left - 1;
+    if (this->_topInChange  + y == this->_top)  this->_topInChange  = this->_top  - 1;
 }
 
 Coord ArrayBoard::Width() const {
