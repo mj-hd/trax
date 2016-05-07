@@ -20,6 +20,7 @@ public:
 
     void BeginChange();
     void EndChange();
+    void CancelChange();
 
 private:
     Cell _board[512][512];

@@ -84,6 +84,8 @@ void Host::_chain(Coord x, Coord y) {
     if (cntRed + cntWht < 2) return;
     if (cntRed == cntWht)    return;
 
+    if (cntRed > 2 || cntWht > 2) throw "Operation Not Permitted";
+
     cell.Color     = tile;
     cell.IsColored = colored;
 

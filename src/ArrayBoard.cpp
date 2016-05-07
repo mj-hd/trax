@@ -57,3 +57,7 @@ void ArrayBoard::EndChange() {
     this->_right  = this->_rightInChange;
     this->_bottom = this->_bottomInChange;
 }
+
+void ArrayBoard::CancelChange() {
+    // TODO: implement here
+}

@@ -19,6 +19,8 @@ public:
     virtual void BeginChange() = 0;
     virtual void EndChange() = 0;
 
+    virtual void CancelChange() = 0;
+
     friend IBoard* operator<<(IBoard* b, const Operation& op);
 
     friend std::ostream& operator<<(std::ostream& stream, const IBoard& b);

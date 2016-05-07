@@ -108,6 +108,8 @@ decideOtherColors:
             break;
     }
 
+    // TODO: detect invalid tile placement
+
     b->Set(op.X, op.Y, cell);
 
     return b;
