@@ -3,6 +3,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "Exceptions.h"
+
 IBoard* operator<<(IBoard* b, const Operation& op) {
     auto cell = b->Get(op.X, op.Y);
 
@@ -12,7 +14,7 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
     auto& left   = (op.X == 0) ? EmptyCell : b->Get(op.X - 1, op.Y);
 
     if (cell.Exists)
-        throw "Cell Already Exists";
+        throw new TileAlreadyExistsException(op.X, op.Y);
 
     switch (op.Type) {
         case NotationType::Cross:
@@ -144,4 +146,85 @@ std::ostream& operator<<(std::ostream& stream, const IBoard& b) {
     }
 
     return stream;
+}
+
+void IBoard::BeginChange() {
+    this->_Changes.clear();
+}
+
+void IBoard::EndChange() {
+    for (auto change : this->_Changes) {
+        // TODO: tile should be placed here
+        
+        this->_ChainAround(change.X, change.Y);
+    }
+
+    if (this->_DetectCheckmate())
+        throw new GameOverException(Colors::Red); // TODO: set correct winner
+}
+
+void IBoard::CancelChange() {
+    // TODO: implement here
+}
+
+void IBoard::_Chain(Coord x, Coord y) {
+
+    auto cell = this->Get(x, y);
+
+    if (cell.Exists) return;
+
+    char tile    = 0;
+    char colored = 0;
+    int  cntRed  = 0;
+    int  cntWht  = 0;
+
+    // scan neighbors
+    for (auto i = 0; i < 4; i++) {
+        auto sx = x + ((i*2 + 1) % 3) - 1;
+        auto sy = y + ((i*2 + 1) / 3) - 1;
+
+        auto& neighbor = this->Get(sx, sy);
+
+        if (!neighbor.Exists) continue;
+
+        char color = ((neighbor.Color >> i) & 1);
+
+        cntRed += color;
+        cntWht += !color;
+
+        tile    |= color << (3 - i);
+        colored |= 1 << (3 - i);
+    }
+
+    if (cntRed + cntWht < 2) return;
+    if (cntRed == cntWht)    return;
+
+    if (cntRed > 2 || cntWht > 2) throw new ChainFailedException(x, y);
+
+    cell.Color     = tile;
+    cell.IsColored = colored;
+
+    if (cntRed < cntWht) {
+        for (auto i = 0; i < 4; i++) {
+            if (!(colored & (1 << i)))
+                cell.Color |= 1 << i;
+        }
+    }
+
+    this->Set(x, y, cell);
+
+    this->_ChainAround(x, y);
+
+}
+
+void IBoard::_ChainAround(Coord x, Coord y) {
+    if (y > 0                ) this->_Chain(x,     y - 1);
+    if (x < this->Width() - 1) this->_Chain(x + 1, y);
+    if (y < this->Height()- 1) this->_Chain(x,     y + 1);
+    if (x > 0                ) this->_Chain(x - 1, y);
+}
+
+bool IBoard::_DetectCheckmate() {
+    // TODO: implement here
+    return false;
 }

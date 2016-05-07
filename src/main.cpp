@@ -3,6 +3,8 @@
 #include "Host.h"
 //#include "Bot.h"
 
+#include "Exceptions.h"
+
 int main(int argc, char* argv[]) {
 
     auto player1 = new Player();
@@ -11,8 +13,16 @@ int main(int argc, char* argv[]) {
 
     auto host = new Host(player1, player2);
 
-    while(host->Turn());
+    try {
+        while(host->Turn());
+    }
+    catch (Exception* e) {
+        std::cerr << e->GetMessage() << std::endl;
 
+        goto end;
+    }
+
+end:
     delete host;
     delete player1, player2;
 }

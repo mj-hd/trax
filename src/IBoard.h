@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iterator>
+#include <vector>
 
 #include "Structs.h"
 
@@ -16,14 +17,21 @@ public:
     virtual Coord Width()  const = 0;
     virtual Coord Height() const = 0;
 
-    virtual void BeginChange() = 0;
-    virtual void EndChange() = 0;
+    virtual void BeginChange();
+    virtual void EndChange();
 
-    virtual void CancelChange() = 0;
+    virtual void CancelChange();
 
     friend IBoard* operator<<(IBoard* b, const Operation& op);
 
     friend std::ostream& operator<<(std::ostream& stream, const IBoard& b);
+
+protected:
+    virtual void _Chain(Coord x, Coord y);
+    virtual void _ChainAround(Coord x, Coord y);
+    virtual bool _DetectCheckmate();
+
+    std::vector<Operation> _Changes;
 };
 
 #endif

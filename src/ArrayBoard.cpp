@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include "Exceptions.h"
+
 ArrayBoard::ArrayBoard() {
     this->_left   = 256;
     this->_top    = 256;
@@ -14,7 +16,7 @@ ArrayBoard::ArrayBoard() {
 Cell& ArrayBoard::operator()(Coord x, Coord y) {
     if ((x >= this->Width()) ||
         (y >= this->Height()))
-        throw "Out of Range";
+        throw new CellOutOfRangeException(x, y);
 
     return this->_board[this->_left + x][this->_top + y];
 }

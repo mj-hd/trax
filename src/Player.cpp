@@ -7,6 +7,7 @@
 #include "Structs.h"
 #include "ArrayBoard.h"
 #include "IBoard.h"
+#include "Exceptions.h"
 
 Player::Player() {
     this->_board = new ArrayBoard();
@@ -35,11 +36,16 @@ input:
 
         operation = Operation::ToOperation(notation.c_str());
 
-        //this->_board << operation;
+        this->_board << operation;
 
     }
-    catch (const char* message) {
-        std::cerr << message << std::endl;
+    catch (InvalidNotationException* e) {
+        std::cerr << e->GetMessage() << std::endl;
+
+        goto input;
+    }
+    catch (InvalidPlacementException* e) {
+        std::cerr << e->GetMessage() << std::endl;
 
         goto input;
     }
