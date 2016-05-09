@@ -12,6 +12,13 @@ enum class Colors : unsigned char {
     White = 0b0000000
 };
 
+enum class Direction : unsigned char {
+    Top    = 0b00001000,
+    Left   = 0b00000100,
+    Right  = 0b00000010,
+    Bottom = 0b00000001
+};
+
 // names indicate where red points are
 // -----------
 // |    1    |

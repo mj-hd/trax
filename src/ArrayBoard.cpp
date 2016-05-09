@@ -51,6 +51,8 @@ void ArrayBoard::BeginChange() {
     this->_topInChange    = this->_top;
     this->_rightInChange  = this->_right;
     this->_bottomInChange = this->_bottom;
+
+    IBoard::BeginChange();
 }
 
 void ArrayBoard::EndChange() {
@@ -58,8 +60,10 @@ void ArrayBoard::EndChange() {
     this->_top    = this->_topInChange;
     this->_right  = this->_rightInChange;
     this->_bottom = this->_bottomInChange;
+
+    IBoard::EndChange();
 }
 
 void ArrayBoard::CancelChange() {
-    // TODO: implement here
+    IBoard::CancelChange();
 }

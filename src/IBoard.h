@@ -29,6 +29,8 @@ public:
 protected:
     virtual void _Chain(Coord x, Coord y);
     virtual void _ChainAround(Coord x, Coord y);
+    virtual void _TraceLines();
+    virtual int _TraceLine(Coord x, Coord y, Colors color, Direction direction, Direction* lastDirection);
     virtual bool _DetectCheckmate();
 
     std::vector<Operation> _Changes;

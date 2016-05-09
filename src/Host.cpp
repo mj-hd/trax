@@ -20,7 +20,7 @@ bool Host::Turn() {
 
     Operation operation;
 
-    for (auto player : this->_players) {
+    for (auto& player : this->_players) {
 dc:
         operation = player->Turn();
 

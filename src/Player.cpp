@@ -36,8 +36,11 @@ input:
 
         operation = Operation::ToOperation(notation.c_str());
 
-        this->_board << operation;
+        //this->_board->BeginChange();
 
+        //this->_board << operation;
+
+        //this->_board->EndChange();
     }
     catch (InvalidNotationException* e) {
         std::cerr << e->GetMessage() << std::endl;
