@@ -135,6 +135,8 @@ decideOtherColors:
 
     b->_ChainAround(op.X, op.Y);
 
+    b->_TraceLoops(op.X, op.Y);
+
     return b;
 }
 
@@ -176,7 +178,7 @@ void IBoard::BeginChange() {
 void IBoard::EndChange() {
     for (const auto& change : this->_Changes) {
         // TODO: tile should be placed here
-
+        
     }
 
     this->_TraceLines();
@@ -261,7 +263,7 @@ void IBoard::_TraceLines() {
 
         if (this->_TraceLine(1, y, color, Direction::Left, &lastDirection) >= 8)
             if (lastDirection == Direction::Right)
-                throw new GameOverException(color); // TODO: WiningLineException
+                throw new GameOverException(color); // TODO: WiningLineGameOverException
     }
 
     // horizontal
@@ -271,7 +273,7 @@ void IBoard::_TraceLines() {
 
         if (this->_TraceLine(x, 1, color, Direction::Top, &lastDirection) >= 8)
             if (lastDirection == Direction::Bottom)
-                throw new GameOverException(color); // TODO: WiningLineException
+                throw new GameOverException(color); // TODO: WiningLineGameOverException
 
     }
 }
@@ -283,10 +285,8 @@ int IBoard::_TraceLine(Coord x, Coord y, Colors color, Direction direction, Dire
 
     if (color == Colors::White) cell.Color = ~cell.Color;
 
-    auto directions = cell.Color & (unsigned char)Colors::Red;
-
     for (auto i = 0; i < 4; i++) {
-        if ((directions >> (3 - i)) & 1) {
+        if ((cell.Color >> (3 - i)) & 1) {
             if (((unsigned char)direction >> (3 - i)) & 1) continue;
 
             auto sx = (i * 2 + 1) % 3 - 1;
@@ -299,6 +299,57 @@ int IBoard::_TraceLine(Coord x, Coord y, Colors color, Direction direction, Dire
     }
 
     return 1;
+}
+
+void IBoard::_TraceLoops(Coord x, Coord y) {
+    bool searchedRed = false;
+    bool searchedWht = false;
+    auto cell = this->Get(x, y);
+
+    for (auto i = 0; i < 4; i++) {
+        auto sx = (i * 2 + 1) % 3 - 1;
+        auto sy = (i * 2 + 1) / 3 - 1;
+
+        if ((cell.Color >> i) & 1)
+            if (!searchedRed) {
+                if (this->_TraceLoop(x + sx, y + sy, Colors::Red, (Direction)(1 << (3 - i)), x, y))
+                    throw new GameOverException(Colors::Red);
+                searchedRed = true;
+            }
+        else
+            if (!searchedWht) {
+                if (this->_TraceLoop(x + sx, y + sy, Colors::White, (Direction)(1 << (3 - i)), x, y))
+                    throw new GameOverException(Colors::White);
+                searchedWht = true;
+            }
+    }
+
+}
+
+bool IBoard::_TraceLoop(Coord x, Coord y, Colors color, Direction direction, Coord ortX, Coord ortY) {
+    auto cell = this->Get(x, y);
+
+    if (!cell.Exists) return false;
+
+    std::cerr << (int)color << " " << (int)x << ", " << (int)y << std::endl;
+
+    if (x == ortX && y == ortY) return true;
+
+
+    if (color == Colors::White) cell.Color = ~cell.Color;
+
+    for (auto i = 0; i < 4; i++) {
+        if ((cell.Color >> (3 - i)) & 1) {
+            if (((unsigned char)direction >> (3 - i)) & 1) continue;
+
+            auto sx = (i * 2 + 1) % 3 - 1;
+            auto sy = (i * 2 + 1) / 3 - 1;
+
+            return this->_TraceLoop(x + sx, y + sy, color, (Direction)(1 << i), x, y);
+        }
+    }
+
+    return false;
 }
 
 bool IBoard::_DetectCheckmate() {
