@@ -31,6 +31,8 @@ protected:
     virtual void _ChainAround(Coord x, Coord y);
     virtual void _TraceLines();
     virtual int _TraceLine(Coord x, Coord y, Colors color, Direction direction, Direction* lastDirection);
+    virtual void _TraceLoops(Coord x, Coord y);
+    virtual bool _TraceLoop(Coord x, Coord y, Colors color, Direction direction, Coord ortX, Coord ortY);
     virtual bool _DetectCheckmate();
 
     std::vector<Operation> _Changes;
