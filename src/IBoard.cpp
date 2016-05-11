@@ -38,8 +38,14 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
     switch (op.Type) {
         case NotationType::Cross:
 
-            if (top.Exists || bottom.Exists)  { cell.Type = (unsigned char)TileType::Vertical;  break; }
-            if (right.Exists || left.Exists)  { cell.Type = (unsigned char)TileType::Horizontal; break; }
+            cell.Tile = TileType::Horizontal;
+
+            // if bottom of top cell is white, do nothing
+            // if bottom of top cell is red,   rotate tile
+            if (top.Exists)    { cell.Type ^= 0b1111 * top.Bottom;  break; }
+            if (right.Exists)  { cell.Type ^= 0b1111 * !right.Left; break; }
+            if (bottom.Exists) { cell.Type ^= 0b1111 * bottom.Top;  break; }
+            if (left.Exists)   { cell.Type ^= 0b1111 * !left.Right; break; }
 
             break;
         case NotationType::Slash:
