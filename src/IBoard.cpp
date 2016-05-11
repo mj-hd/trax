@@ -185,6 +185,8 @@ void IBoard::CancelChange() {
     }
 }
 
+inline int GetOppositeIndex(int i) { return 3 - i; }
+
 void IBoard::_Chain(Coord x, Coord y) {
 
     auto cell = this->Get(x, y);
@@ -210,8 +212,8 @@ void IBoard::_Chain(Coord x, Coord y) {
         cntRed += color;
         cntWht += !color;
 
-        tile    |= color << (3 - i);
-        colored |= 1 << (3 - i);
+        tile    |= color << GetOppositeIndex(i);
+        colored |= 1 << GetOppositeIndex(i);
     }
 
     if (cntRed + cntWht < 2) return;
@@ -280,13 +282,13 @@ int IBoard::_TraceLine(Coord x, Coord y, Colors color, Direction direction, Dire
     auto directions = cell.Color & (unsigned char)Colors::Red;
 
     for (auto i = 0; i < 4; i++) {
-        if ((directions >> (3 - i)) & 1) {
-            if (((unsigned char)direction >> (3 - i)) & 1) continue;
+        if ((directions >> GetOppositeIndex(i)) & 1) {
+            if (((unsigned char)direction >> GetOppositeIndex(i)) & 1) continue;
 
             auto sx = (i * 2 + 1) % 3 - 1;
             auto sy = (i * 2 + 1) / 3 - 1;
 
-            *lastDirection = (Direction)(1 << (3 - i));
+            *lastDirection = (Direction)(1 << GetOppositeIndex(i));
 
             return 1 + this->_TraceLine(x + sx, y + sy, color, (Direction)(1 << i), lastDirection);
         }
