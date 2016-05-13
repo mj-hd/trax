@@ -135,7 +135,11 @@ decideOtherColors:
             break;
     }
 
-    // TODO: check neighbor's color, throw InvalidPlacementException
+    if ((top.Exists    && cell.Top    != top.Bottom) ||
+        (left.Exists   && cell.Left   != left.Right) ||
+        (right.Exists  && cell.Right  != right.Left) ||
+        (bottom.Exists && cell.Bottom != bottom.Top))
+        throw new InvalidPlacementException(op.X, op.Y);
 
     b->Set(op.X, op.Y, cell);
 
