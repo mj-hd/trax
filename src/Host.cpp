@@ -33,6 +33,8 @@ dc:
         }
         // GameOver
         catch (GameOverException* e) {
+            std::cout << *this->_board;
+
             std::cerr << e->GetMessage() << std::endl;
             std::cerr << "Winner is " << (e->GetWinner() == Colors::Red ? "Red" : "White") << std::endl;
 

@@ -25,6 +25,22 @@ private:
     Colors _winner;
 };
 
+class WiningLineGameOverException : public GameOverException {
+public:
+    WiningLineGameOverException(Colors winner)
+        : GameOverException(winner) {
+        this->_Message = "Wining Line Found!";
+    }
+};
+
+class LoopGameOverException : public GameOverException {
+public:
+    LoopGameOverException(Colors winner)
+        : GameOverException(winner) {
+        this->_Message = "Loop Found!";
+    }
+};
+
 class InvalidPlacementException : public Exception {
 public:
     InvalidPlacementException(Coord x, Coord y)
@@ -62,6 +78,22 @@ public:
     ChainFailedException(Coord x, Coord y)
         : InvalidPlacementException(x, y) {
         this->_Message = "Chain Failed";
+    }
+};
+
+class InvalidFirstOperationException : public InvalidPlacementException {
+public:
+    InvalidFirstOperationException(Coord x, Coord y)
+        : InvalidPlacementException(x, y) {
+        this->_Message = "Invalid First Operation";
+    }
+};
+
+class IsolatedPlacementException : public InvalidPlacementException {
+public:
+    IsolatedPlacementException(Coord x, Coord y)
+        : InvalidPlacementException(x, y) {
+        this->_Message = "Isolated Placement";
     }
 };
 

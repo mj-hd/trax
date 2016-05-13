@@ -21,11 +21,11 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
 
     // not allowed for first operation
     if (b->Width() == 1 && b->Height() == 1) {
-        if (op.X != 0 || op.Y != 0 || op.Type != NotationType::Cross)
-            throw new InvalidPlacementException(op.X, op.Y); // TODO: InvalidFirstOperationException
+        if (op.X != 0 || op.Y != 0 || op.Type == NotationType::BackSlash)
+            throw new InvalidFirstOperationException(op.X, op.Y);
     } else {
         if (!top.Exists && !right.Exists && !bottom.Exists && !left.Exists)
-            throw new InvalidPlacementException(op.X, op.Y); // TODO: IsolatedPlacementException
+            throw new IsolatedPlacementException(op.X, op.Y);
     }
 
     // 3 same colors
@@ -59,23 +59,29 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
                 cell.ColoredTop    = 1;
                 cell.ColoredLeft   = 1;
             }
-            if (right.Exists)  {
+            else if (right.Exists)  {
                 cell.Right         = right.Left;
                 cell.Bottom        = right.Left;
                 cell.ColoredRight  = 1;
                 cell.ColoredBottom = 1;
             }
-            if (bottom.Exists) {
+            else if (bottom.Exists) {
                 cell.Bottom        = bottom.Top;
                 cell.Right         = bottom.Top;
                 cell.ColoredBottom = 1;
                 cell.ColoredRight  = 1;
             }
-            if (left.Exists)   {
+            else if (left.Exists)   {
                 cell.Left          = left.Right;
                 cell.Top           = left.Right;
                 cell.ColoredLeft   = 1;
                 cell.ColoredTop    = 1;
+            }
+            else {
+                cell.Top         = 1;
+                cell.Left        = 1;
+                cell.ColoredTop  = 1;
+                cell.ColoredLeft = 1;
             }
 
             goto decideOtherColors;
@@ -128,6 +134,8 @@ decideOtherColors:
 
             break;
     }
+
+    // TODO: check neighbor's color, throw InvalidPlacementException
 
     b->Set(op.X, op.Y, cell);
 
@@ -182,9 +190,6 @@ void IBoard::EndChange() {
     }
 
     this->_TraceLines();
-
-    if (this->_DetectCheckmate())
-        throw new GameOverException(Colors::Red); // TODO: set correct winner
 }
 
 void IBoard::CancelChange() {
@@ -265,17 +270,17 @@ void IBoard::_TraceLines() {
 
         if (this->_TraceLine(1, y, color, Direction::Left, &lastDirection) >= 8)
             if (lastDirection == Direction::Right)
-                throw new GameOverException(color); // TODO: WiningLineGameOverException
+                throw new WiningLineGameOverException(color);
     }
 
     // horizontal
     for (Coord x = 1; x < this->Width() - 1; x++) {
 
-        color = this->Get(x, 1).Color & (unsigned char)Direction::Left ? Colors::Red : Colors::White;
+        color = this->Get(x, 1).Color & (unsigned char)Direction::Top ? Colors::Red : Colors::White;
 
         if (this->_TraceLine(x, 1, color, Direction::Top, &lastDirection) >= 8)
             if (lastDirection == Direction::Bottom)
-                throw new GameOverException(color); // TODO: WiningLineGameOverException
+                throw new WiningLineGameOverException(color);
 
     }
 }
@@ -316,13 +321,13 @@ void IBoard::_TraceLoops(Coord x, Coord y) {
         if ((cell.Color >> GetOppositeIndex(i)) & 1) {
             if (!searchedRed) {
                 if (this->_TraceLoop(x + sx, y + sy, Colors::Red, (Direction)(1 << i), x, y))
-                    throw new GameOverException(Colors::Red);
+                    throw new LoopGameOverException(Colors::Red);
                 searchedRed = true;
             }
         } else {
             if (!searchedWht) {
                 if (this->_TraceLoop(x + sx, y + sy, Colors::White, (Direction)(1 << i), x, y))
-                    throw new GameOverException(Colors::White);
+                    throw new LoopGameOverException(Colors::White);
                 searchedWht = true;
             }
         }
@@ -352,10 +357,5 @@ bool IBoard::_TraceLoop(Coord x, Coord y, Colors color, Direction direction, Coo
         }
     }
 
-    return false;
-}
-
-bool IBoard::_DetectCheckmate() {
-    // TODO: implement here
     return false;
 }
