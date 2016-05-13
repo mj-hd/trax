@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "Exceptions.h"
+#include "../Structs/Exceptions.h"
 
 IBoard* operator<<(IBoard* b, const Operation& op) {
 

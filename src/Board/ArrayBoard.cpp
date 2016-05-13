@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include "Exceptions.h"
+#include "../Structs/Exceptions.h"
 
 ArrayBoard::ArrayBoard() {
     this->_left   = 256;

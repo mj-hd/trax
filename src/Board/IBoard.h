@@ -5,7 +5,7 @@
 #include <iterator>
 #include <vector>
 
-#include "Structs.h"
+#include "../Structs/Structs.h"
 
 class IBoard {
 public:

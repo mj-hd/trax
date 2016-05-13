@@ -1,9 +1,9 @@
-#include "IPlayer.h"
-#include "Player.h"
+#include "Player/IPlayer.h"
+#include "Player/Player.h"
 #include "Host.h"
 //#include "Bot.h"
 
-#include "Exceptions.h"
+#include "Structs/Exceptions.h"
 
 int main(int argc, char* argv[]) {
 

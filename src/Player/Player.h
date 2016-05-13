@@ -3,8 +3,8 @@
 
 #include "IPlayer.h"
 
-#include "ArrayBoard.h"
-#include "Structs.h"
+#include "../Board/ArrayBoard.h"
+#include "../Structs/Structs.h"
 
 class Player : public IPlayer {
 public:

@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "ArrayBoard.h"
-#include "Exceptions.h"
+#include "Board/ArrayBoard.h"
+#include "Structs/Exceptions.h"
 
 Host::Host(IPlayer* player1, IPlayer* player2) {
     this->_players[0] = player1;

@@ -4,10 +4,10 @@
 #include <string>
 #include <cstdlib>
 
-#include "Structs.h"
-#include "ArrayBoard.h"
-#include "IBoard.h"
-#include "Exceptions.h"
+#include "../Structs/Structs.h"
+#include "../Structs/Exceptions.h"
+#include "../Board/IBoard.h"
+#include "../Board/ArrayBoard.h"
 
 Player::Player() {
     this->_board = new ArrayBoard();

@@ -1,7 +1,7 @@
 #ifndef _IPLAYER_H_
 #define _IPLAYER_H_
 
-#include "IBoard.h"
+#include "../Board/IBoard.h"
 
 class IPlayer {
 public:

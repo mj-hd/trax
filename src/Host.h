@@ -1,8 +1,8 @@
 #ifndef _HOST_H_
 #define _HOST_H_
 
-#include "IBoard.h"
-#include "IPlayer.h"
+#include "Board/IBoard.h"
+#include "Player/IPlayer.h"
 
 class Host {
 public:
