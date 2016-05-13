@@ -288,7 +288,7 @@ int IBoard::_TraceLine(Coord x, Coord y, Colors color, Direction direction, Dire
     if (color == Colors::White) cell.Color = ~cell.Color;
 
     for (auto i = 0; i < 4; i++) {
-        if ((directions >> GetOppositeIndex(i)) & 1) {
+        if ((cell.Color >> GetOppositeIndex(i)) & 1) {
             if (((unsigned char)direction >> GetOppositeIndex(i)) & 1) continue;
 
             auto sx = (i * 2 + 1) % 3 - 1;
@@ -308,24 +308,27 @@ void IBoard::_TraceLoops(Coord x, Coord y) {
     bool searchedWht = false;
     auto cell = this->Get(x, y);
 
-    for (auto i = 0; i < 4; i++) {
+    auto i = 0;
+    while (!searchedRed || !searchedWht) {
         auto sx = (i * 2 + 1) % 3 - 1;
         auto sy = (i * 2 + 1) / 3 - 1;
 
-        if ((cell.Color >> i) & 1)
+        if ((cell.Color >> GetOppositeIndex(i)) & 1) {
             if (!searchedRed) {
-                if (this->_TraceLoop(x + sx, y + sy, Colors::Red, (Direction)(1 << (3 - i)), x, y))
+                if (this->_TraceLoop(x + sx, y + sy, Colors::Red, (Direction)(1 << i), x, y))
                     throw new GameOverException(Colors::Red);
                 searchedRed = true;
             }
-        else
+        } else {
             if (!searchedWht) {
-                if (this->_TraceLoop(x + sx, y + sy, Colors::White, (Direction)(1 << (3 - i)), x, y))
+                if (this->_TraceLoop(x + sx, y + sy, Colors::White, (Direction)(1 << i), x, y))
                     throw new GameOverException(Colors::White);
                 searchedWht = true;
             }
-    }
+        }
 
+        i++;
+    }
 }
 
 bool IBoard::_TraceLoop(Coord x, Coord y, Colors color, Direction direction, Coord ortX, Coord ortY) {
@@ -333,21 +336,19 @@ bool IBoard::_TraceLoop(Coord x, Coord y, Colors color, Direction direction, Coo
 
     if (!cell.Exists) return false;
 
-    std::cerr << (int)color << " " << (int)x << ", " << (int)y << std::endl;
-
     if (x == ortX && y == ortY) return true;
 
 
     if (color == Colors::White) cell.Color = ~cell.Color;
 
     for (auto i = 0; i < 4; i++) {
-        if ((cell.Color >> (3 - i)) & 1) {
-            if (((unsigned char)direction >> (3 - i)) & 1) continue;
+        if ((cell.Color >> GetOppositeIndex(i)) & 1) {
+            if (((unsigned char)direction >> GetOppositeIndex(i)) & 1) continue;
 
             auto sx = (i * 2 + 1) % 3 - 1;
             auto sy = (i * 2 + 1) / 3 - 1;
 
-            return this->_TraceLoop(x + sx, y + sy, color, (Direction)(1 << i), x, y);
+            return this->_TraceLoop(x + sx, y + sy, color, (Direction)(1 << i), ortX, ortY);
         }
     }
 
