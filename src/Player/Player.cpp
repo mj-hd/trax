@@ -9,14 +9,12 @@
 #include "../Board/IBoard.h"
 #include "../Board/ArrayBoard.h"
 
-Player::Player() {
-    this->_board = new ArrayBoard();
-    //this->_board = new MapBoard();
-    //this->_board = new TreeBoard();
+Player::Player()
+    : _board(*new ArrayBoard()) {
 }
 
 Player::~Player() {
-    delete this->_board;
+    delete &this->_board;
 }
 
 Operation Player::Turn() {

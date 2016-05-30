@@ -14,7 +14,7 @@ public:
     Operation Turn();
 
 protected:
-    IBoard* _board;
+    IBoard& _board;
 };
 
 #endif

@@ -5,14 +5,14 @@
 
 #include "../Structs/Exceptions.h"
 
-IBoard* operator<<(IBoard* b, const Operation& op) {
+IBoard& operator<<(IBoard& b, const Operation& op) {
 
-    auto cell = b->Get(op.X, op.Y);
+    auto cell = b.Get(op.X, op.Y);
 
-    auto& top    = (op.Y == 0) ? EmptyCell : b->Get(op.X,     op.Y - 1);
-    auto& right  =                           b->Get(op.X + 1, op.Y);
-    auto& bottom =                           b->Get(op.X,     op.Y + 1);
-    auto& left   = (op.X == 0) ? EmptyCell : b->Get(op.X - 1, op.Y);
+    auto& top    = (op.Y == 0) ? EmptyCell : b.Get(op.X,     op.Y - 1);
+    auto& right  =                           b.Get(op.X + 1, op.Y);
+    auto& bottom =                           b.Get(op.X,     op.Y + 1);
+    auto& left   = (op.X == 0) ? EmptyCell : b.Get(op.X - 1, op.Y);
 
     // validations
     // tile already exists
@@ -20,7 +20,7 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
         throw new TileAlreadyExistsException(op.X, op.Y);
 
     // not allowed for first operation
-    if (b->Width() == 1 && b->Height() == 1) {
+    if (b.Width() == 1 && b.Height() == 1) {
         if (op.X != 0 || op.Y != 0 || op.Type == NotationType::BackSlash)
             throw new InvalidFirstOperationException(op.X, op.Y);
     } else {
@@ -54,34 +54,24 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
 
             // copy neighbors color
             if (top.Exists) {
-                cell.Top           = top.Bottom;
-                cell.Left          = top.Bottom;
-                cell.ColoredTop    = 1;
-                cell.ColoredLeft   = 1;
+                cell.Top        = cell.Left        = top.Bottom;
+                cell.ColoredTop = cell.ColoredLeft = 1;
             }
             else if (right.Exists)  {
-                cell.Right         = right.Left;
-                cell.Bottom        = right.Left;
-                cell.ColoredRight  = 1;
-                cell.ColoredBottom = 1;
+                cell.Right        = cell.Bottom        = right.Left;
+                cell.ColoredRight = cell.ColoredBottom = 1;
             }
             else if (bottom.Exists) {
-                cell.Bottom        = bottom.Top;
-                cell.Right         = bottom.Top;
-                cell.ColoredBottom = 1;
-                cell.ColoredRight  = 1;
+                cell.Bottom        = cell.Right        = bottom.Top;
+                cell.ColoredBottom = cell.ColoredRight = 1;
             }
             else if (left.Exists)   {
-                cell.Left          = left.Right;
-                cell.Top           = left.Right;
-                cell.ColoredLeft   = 1;
-                cell.ColoredTop    = 1;
+                cell.Left        = cell.Top        = left.Right;
+                cell.ColoredLeft = cell.ColoredTop = 1;
             }
             else {
-                cell.Top         = 1;
-                cell.Left        = 1;
-                cell.ColoredTop  = 1;
-                cell.ColoredLeft = 1;
+                cell.Top        = cell.Left         = 1;
+                cell.ColoredTop = cell.ColoredLeft  = 1;
             }
 
             goto decideOtherColors;
@@ -92,28 +82,20 @@ IBoard* operator<<(IBoard* b, const Operation& op) {
 
             // copy neighbors color
             if (top.Exists) {
-                cell.Top           = top.Bottom;
-                cell.Right         = top.Bottom;
-                cell.ColoredTop    = 1;
-                cell.ColoredRight  = 1;
+                cell.Top        = cell.Right        = top.Bottom;
+                cell.ColoredTop = cell.ColoredRight = 1;
             }
             if (right.Exists)  {
-                cell.Right         = right.Left;
-                cell.Top           = right.Left;
-                cell.ColoredRight  = 1;
-                cell.ColoredTop    = 1;
+                cell.Right        = cell.Top        = right.Left;
+                cell.ColoredRight = cell.ColoredTop = 1;
             }
             if (bottom.Exists) {
-                cell.Bottom        = bottom.Top;
-                cell.Left          = bottom.Top;
-                cell.ColoredBottom = 1;
-                cell.ColoredLeft   = 1;
+                cell.Bottom        = cell.Left        = bottom.Top;
+                cell.ColoredBottom = cell.ColoredLeft = 1;
             }
             if (left.Exists)   {
-                cell.Left          = left.Right;
-                cell.Bottom        = left.Right;
-                cell.ColoredLeft   = 1;
-                cell.ColoredBottom = 1;
+                cell.Left        = cell.Bottom        = left.Right;
+                cell.ColoredLeft = cell.ColoredBottom = 1;
             }
 
 decideOtherColors:
@@ -141,13 +123,16 @@ decideOtherColors:
         (bottom.Exists && cell.Bottom != bottom.Top))
         throw new InvalidPlacementException(op.X, op.Y);
 
-    b->Set(op.X, op.Y, cell);
+    // this should be merged
+    b(op.X, op.Y) = cell;
 
-    b->_Changes.push_back(op);
+    b._ChainAround(op.X, op.Y);
 
-    b->_ChainAround(op.X, op.Y);
+    b._TraceLoops(op.X, op.Y);
 
-    b->_TraceLoops(op.X, op.Y);
+    b.Set(op.X, op.Y, cell);
+
+    b._Changes.push_back(op);
 
     return b;
 }

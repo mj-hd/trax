@@ -22,7 +22,7 @@ public:
 
     virtual void CancelChange();
 
-    friend IBoard* operator<<(IBoard* b, const Operation& op);
+    friend IBoard& operator<<(IBoard& b, const Operation& op);
 
     friend std::ostream& operator<<(std::ostream& stream, const IBoard& b);
 

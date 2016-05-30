@@ -5,15 +5,14 @@
 #include "Board/ArrayBoard.h"
 #include "Structs/Exceptions.h"
 
-Host::Host(IPlayer* player1, IPlayer* player2) {
+Host::Host(IPlayer* player1, IPlayer* player2)
+    : _board(*new ArrayBoard()) {
     this->_players[0] = player1;
     this->_players[1] = player2;
-
-    this->_board = new ArrayBoard();
 }
 
 Host::~Host() {
-    delete this->_board;
+    delete &this->_board;
 }
 
 bool Host::Turn() {
@@ -25,15 +24,15 @@ dc:
         operation = player->Turn();
 
         try {
-            this->_board->BeginChange();
+            this->_board.BeginChange();
 
             this->_board << operation;
 
-            this->_board->EndChange();
+            this->_board.EndChange();
         }
         // GameOver
         catch (GameOverException* e) {
-            std::cout << *this->_board;
+            std::cout << this->_board;
 
             std::cerr << e->GetMessage() << std::endl;
             std::cerr << "Winner is " << (e->GetWinner() == Colors::Red ? "Red" : "White") << std::endl;
@@ -43,12 +42,12 @@ dc:
         catch (InvalidPlacementException* e) {
             std::cerr << e->GetMessage() << std::endl;
 
-            this->_board->CancelChange();
+            this->_board.CancelChange();
 
             goto dc;
         }
 
-        std::cout << *this->_board;
+        std::cout << this->_board;
     }
 
     return true;

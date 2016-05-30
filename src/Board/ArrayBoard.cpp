@@ -32,10 +32,10 @@ const Cell& ArrayBoard::Get(Coord x, Coord y) const {
 void ArrayBoard::Set(Coord x, Coord y, Cell& cell) {
     this->_board[this->_left + x][this->_top + y] = cell;
 
-    if (this->_right  == this->_leftInChange + x) this->_rightInChange  = this->_right  + 1;
-    if (this->_bottom == this->_topInChange  + y) this->_bottomInChange = this->_bottom + 1;
-    if (this->_leftInChange + x == this->_left) this->_leftInChange = this->_left - 1;
-    if (this->_topInChange  + y == this->_top)  this->_topInChange  = this->_top  - 1;
+    if (this->_right  == this->_left + x) this->_right  = this->_right  + 1;
+    if (this->_bottom == this->_top  + y) this->_bottom = this->_bottom + 1;
+    if (this->_left + x == this->_left) this->_left = this->_left - 1;
+    if (this->_top  + y == this->_top)  this->_top  = this->_top  - 1;
 }
 
 Coord ArrayBoard::Width() const {
@@ -47,20 +47,10 @@ Coord ArrayBoard::Height() const {
 }
 
 void ArrayBoard::BeginChange() {
-    this->_leftInChange   = this->_left;
-    this->_topInChange    = this->_top;
-    this->_rightInChange  = this->_right;
-    this->_bottomInChange = this->_bottom;
-
     IBoard::BeginChange();
 }
 
 void ArrayBoard::EndChange() {
-    this->_left   = this->_leftInChange;
-    this->_top    = this->_topInChange;
-    this->_right  = this->_rightInChange;
-    this->_bottom = this->_bottomInChange;
-
     IBoard::EndChange();
 }
 

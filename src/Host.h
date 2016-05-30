@@ -11,7 +11,7 @@ public:
     bool Turn();
 
 protected:
-    IBoard* _board;
+    IBoard& _board;
     IPlayer* _players[2];
 };
 

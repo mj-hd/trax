@@ -28,10 +28,6 @@ private:
     InternalCoord _top;
     InternalCoord _right;
     InternalCoord _bottom;
-    InternalCoord _leftInChange;
-    InternalCoord _topInChange;
-    InternalCoord _rightInChange;
-    InternalCoord _bottomInChange;
 };
 
 #endif
